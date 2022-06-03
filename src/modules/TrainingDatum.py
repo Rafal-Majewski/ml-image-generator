@@ -1,20 +1,23 @@
-import PIL.Image as PILImage
+from PIL import Image as PILImage
 
 
 class TrainingDatum:
 	def __init__(
 		self,
 		*,
-		label: str,
+		labelsIds: list[int],
 		image: PILImage.Image
 	) -> None:
-		self._label = label
+		self._labelsIds = labelsIds
 		self._image = image
 
 	@property
-	def label(self) -> str:
-		return self._label
+	def labelsIds(self) -> list[int]:
+		return self._labelsIds
 
 	@property
 	def image(self) -> PILImage.Image:
 		return self._image
+
+	def __str__(self) -> str:
+		return f"TrainingDatum(labelsIds={self._labelsIds}, image={self._image})"
