@@ -11,8 +11,8 @@ class RegexLabelExtractor(LabelExtractor):
 	def regex(self) -> re.Pattern:
 		return self._regex
 
-	def extract(self, filepath: str) -> list[str]:
+	def extract(self, filepath: str) -> set[str]:
 		match: Optional[re.Match] = self._regex.match(filepath)
 		if match is None:
 			raise RuntimeError(f"{filepath} does not match {self._regex}")
-		return [match.group(1)]
+		return {match.group(1)}
