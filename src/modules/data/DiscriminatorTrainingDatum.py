@@ -1,18 +1,19 @@
 from PIL import Image as PILImage
+import numpy as np
 
 
 class DiscriminatorTrainingDatum:
 	def __init__(
 		self,
 		*,
-		discriminations: list[float],
+		discriminations: np.ndarray,
 		image: PILImage.Image
 	) -> None:
 		self._discriminations = discriminations
 		self._image = image
 
 	@property
-	def discriminations(self) -> list[float]:
+	def discriminations(self) -> np.ndarray:
 		return self._discriminations
 
 	@property

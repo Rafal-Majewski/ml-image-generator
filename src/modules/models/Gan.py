@@ -42,7 +42,7 @@ class Gan:
 		data: list[GanTrainingDatum],
 	) -> None:
 		x: np.ndarray = np.array(
-			[datum.discriminations + datum.noise for datum in data]
+			[np.concatenate((datum.discriminations, datum.noise), axis=None) for datum in data]
 		)
 		y: np.ndarray = np.array(
 			[datum.discriminations for datum in data]

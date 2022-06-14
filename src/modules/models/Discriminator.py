@@ -26,8 +26,8 @@ class Discriminator:
 			image.convert("RGB").resize(self._imageSize).getdata()
 		).flatten() / 255
 
-	def discriminate(self, image: PILImage) -> list[float]:
-		discriminations: list[float] = self._model(
+	def discriminate(self, image: PILImage) -> np.ndarray:
+		discriminations: np.ndarray = self._model(
 			np.array([self.imageToNumbers(image)]),
 			training=False,
 		).numpy()[0]

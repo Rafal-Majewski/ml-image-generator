@@ -66,7 +66,7 @@ def createGeneratorModel() -> keras.Model:
 def generateFakeDiscriminatorTrainingDatum(
 	generator: Generator,
 ) -> DiscriminatorTrainingDatum:
-	noise = np.random.uniform(-1, 1, size=(1, generatorNoiseNeuronsCount))
+	noise = np.random.uniform(-1, 1, size=generatorNoiseNeuronsCount)
 	labelId: int = random.randint(0, len(labels) - 1)
 	discriminations = [0 for _ in range(len(labels))]
 	discriminations[labelId] = 1

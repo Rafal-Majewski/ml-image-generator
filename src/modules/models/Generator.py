@@ -24,9 +24,9 @@ class Generator:
 			(numbers.reshape(self._imageSize[0], self._imageSize[1], 3) * 255).astype(np.uint8),
 		).convert("RGB")
 
-	def generate(self, discriminations: list[float], noise: list[float]) -> PILImage:
+	def generate(self, discriminations: np.ndarray, noise: np.ndarray) -> PILImage:
 		generatedNumbers: np.ndarray = self._model.predict(
-			np.array([discriminations + noise]),
+			np.array(np.concatenate((discriminations, noise), axis=None)),
 			training=False,
 		).numpy()[0]
 		return self.numbersToImage(generatedNumbers)

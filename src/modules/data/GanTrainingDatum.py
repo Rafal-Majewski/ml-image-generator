@@ -5,14 +5,14 @@ class GanTrainingDatum:
 	def __init__(
 		self,
 		*,
-		discriminations: list[float],
+		discriminations: np.ndarray,
 		noiseSize: int,
 	) -> None:
 		self._discriminations = discriminations
 		self._noise = np.random.normal(0,1, noiseSize)
 
 	@property
-	def discriminations(self) -> list[float]:
+	def discriminations(self) -> np.ndarray:
 		return self._discriminations
 
 	@property
