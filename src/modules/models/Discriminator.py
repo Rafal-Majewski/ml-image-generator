@@ -2,7 +2,7 @@ import random
 from typing import Tuple
 import tensorflow.python.keras as keras
 from PIL import Image as PILImage
-from src.modules.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
+from src.modules.data.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
 import numpy as np
 
 
