@@ -17,6 +17,10 @@ class Discriminator:
 		self._model = model
 		self._imageSize = imageSize
 
+	@property
+	def model(self) -> keras.Model:
+		return self._model
+
 	def imageToNumbers(self, image: PILImage) -> np.ndarray:
 		return np.array(
 			image.convert("RGB").resize(self._imageSize).getdata()
