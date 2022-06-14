@@ -15,6 +15,10 @@ class Generator:
 		self._model = model
 		self._imageSize = imageSize
 
+	@property
+	def model(self) -> keras.Model:
+		return self._model
+
 	def numbersToImage(self, numbers: np.ndarray) -> PILImage:
 		return PILImage.fromarray(
 			(numbers.reshape(self._imageSize[0], self._imageSize[1], 3) * 255).astype(np.uint8),
