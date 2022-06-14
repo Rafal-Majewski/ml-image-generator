@@ -27,9 +27,8 @@ class Discriminator:
 		).flatten() / 255
 
 	def discriminate(self, image: PILImage) -> np.ndarray:
-		discriminations: np.ndarray = self._model(
+		discriminations: np.ndarray = self._model.predict(
 			np.array([self.imageToNumbers(image)]),
-			training=False,
 		).numpy()[0]
 		return discriminations
 
