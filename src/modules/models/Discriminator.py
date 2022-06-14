@@ -37,14 +37,11 @@ class Discriminator:
 		self,
 		data: list[DiscriminatorTrainingDatum],
 	) -> None:
-		shuffedData = list(data)
-		random.shuffle(shuffedData)
-
 		x: np.ndarray = np.array(
-			[self.imageToNumbers(datum.image) for datum in shuffedData]
+			[self.imageToNumbers(datum.image) for datum in data]
 		)
 		y: np.ndarray = np.array(
-			[datum.discriminations for datum in shuffedData]
+			[datum.discriminations for datum in data]
 		)
 
 		self._model.train_on_batch(x, y)
