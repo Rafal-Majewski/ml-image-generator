@@ -1,6 +1,7 @@
 import random
 from typing import Tuple
 import numpy as np
+from src.modules.data.GanTrainingDatum import GanTrainingDatum
 from src.modules.models.Discriminator import Discriminator
 from src.modules.models.Gan import Gan
 from src.modules.models.Generator import Generator
@@ -90,34 +91,53 @@ def generateDiscriminatorTrainingData(
 			generatedData.append(random.choice(inputData))
 	return generatedData
 
+def generateGanTrainingData(
+	size: int,
+) -> list[DiscriminatorTrainingDatum]:
+	generatedData: list[DiscriminatorTrainingDatum] = []
+	for _ in range(size):
+		discriminations = [0 for _ in range(len(labels))]
+		labelId: int = random.randint(0, len(labels) - 1)
+		discriminations[labelId] = 1
+		noise = np.random.normal(0, 1, size=generatorNoiseNeuronsCount)
+		generatedData.append(GanTrainingDatum(
+			discriminations=discriminations,
+			noise=noise,
+		))
+	return generatedData
 
-def train(
-	gan: Gan,
-	inputData: list[DiscriminatorTrainingDatum],
-) -> None:
-	for epochNumber in range(20):
-		print(generateDiscriminatorTrainingData(inputData, gan.generator, len(inputData)))
+print(generateGanTrainingData(10)[0])
 
-if __name__ == "__main__":
-	tf.random.set_seed(42)
-	random.seed(42)
+# def train(
+# 	gan: Gan,
+# 	inputData: list[DiscriminatorTrainingDatum],
+# ) -> None:
+# 	for epochNumber in range(5):
+# 		dtd = generateDiscriminatorTrainingData(inputData, gan.generator, 10)
+# 		gan.discriminator.train(dtd)
 
-	trainingDataFileReader = DiscriminatorTrainingDataFileReader(
-		labelExtractor=RegexLabelExtractor("^training_data/([a-z A-Z]+)/.*$"),
-		labels=labels,
-	)
-	inputData: list[DiscriminatorTrainingDatum] = trainingDataFileReader.read("training_data")
 
-	discriminator = Discriminator(
-		model=createDiscriminatorModel(),
-		imageSize=imageSize,
-	)
-	generator = Generator(
-		model=createGeneratorModel(),
-		imageSize=imageSize,
-	)
-	gan = Gan(
-		discriminator=discriminator,
-		generator=generator,
-	)
-	train(gan, inputData)
+
+# if __name__ == "__main__":
+# 	tf.random.set_seed(42)
+# 	random.seed(42)
+
+# 	trainingDataFileReader = DiscriminatorTrainingDataFileReader(
+# 		labelExtractor=RegexLabelExtractor("^training_data/([a-z A-Z]+)/.*$"),
+# 		labels=labels,
+# 	)
+# 	inputData: list[DiscriminatorTrainingDatum] = trainingDataFileReader.read("training_data")
+
+# 	discriminator = Discriminator(
+# 		model=createDiscriminatorModel(),
+# 		imageSize=imageSize,
+# 	)
+# 	generator = Generator(
+# 		model=createGeneratorModel(),
+# 		imageSize=imageSize,
+# 	)
+# 	gan = Gan(
+# 		discriminator=discriminator,
+# 		generator=generator,
+# 	)
+# 	train(gan, inputData)

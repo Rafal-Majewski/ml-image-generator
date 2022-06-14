@@ -6,10 +6,10 @@ class GanTrainingDatum:
 		self,
 		*,
 		discriminations: np.ndarray,
-		noiseSize: int,
+		noise: np.ndarray,
 	) -> None:
 		self._discriminations = discriminations
-		self._noise = np.random.normal(0,1, noiseSize)
+		self._noise = noise
 
 	@property
 	def discriminations(self) -> np.ndarray:
