@@ -9,7 +9,7 @@ class GeneratorTrainingDatum:
 		noiseSize: int,
 	) -> None:
 		self._discriminations = discriminations
-		self._noise = np.random.randn(noiseSize)
+		self._noise = np.random.normal(0,1, noiseSize)
 
 	@property
 	def discriminations(self) -> list[float]:
