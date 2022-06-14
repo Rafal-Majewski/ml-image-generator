@@ -1,5 +1,5 @@
 from typing import Optional
-from src.modules.abstract.LabelExtractor import LabelExtractor
+from src.modules.utils.abstract.LabelExtractor import LabelExtractor
 import re
 
 
