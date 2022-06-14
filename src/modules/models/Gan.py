@@ -2,22 +2,23 @@ import numpy as np
 import tensorflow.python.keras as keras
 
 from src.modules.data.GanTrainingDatum import GanTrainingDatum
+from src.modules.models.Discriminator import Discriminator
+from src.modules.models.Generator import Generator
 
 
 class Gan:
 	def __init__(
 		self,
 		*,
-		discriminatorModel: keras.Model,
-		generatorModel: keras.Model,
+		discriminator: Discriminator,
+		generator: Generator,
 	) -> None:
 		super().__init__()
-		self._discriminatorModel = discriminatorModel
-		self._generatorModel = generatorModel
-
 		self._model = keras.models.Sequential()
-		self._model.add(self._generatorModel)
-		self._model.add(self._discriminatorModel)
+		self._generator = generator
+		self._discriminator = discriminator
+		self._model.add(self._generator.model)
+		self._model.add(self._discriminator.model)
 		self._model.compile(
 			loss=["binary_crossentropy", "binary_crossentropy"],
 			optimizer="adam",
@@ -29,12 +30,12 @@ class Gan:
 		return self._model
 	
 	@property
-	def discriminatorModel(self) -> keras.Model:
-		return self._discriminatorModel
+	def discriminator(self) -> Discriminator:
+		return self._discriminator
 
 	@property
-	def generatorModel(self) -> keras.Model:
-		return self._generatorModel
+	def generator(self) -> Generator:
+		return self._generator
 
 	def train(
 		self,
