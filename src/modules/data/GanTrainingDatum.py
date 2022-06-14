@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class GeneratorTrainingDatum:
+class GanTrainingDatum:
 	def __init__(
 		self,
 		*,
