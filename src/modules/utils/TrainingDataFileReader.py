@@ -1,5 +1,5 @@
 from src.modules.data.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
-from src.modules.abstract.LabelExtractor import LabelExtractor
+from src.modules.utils.abstract.LabelExtractor import LabelExtractor
 from PIL import Image as PILImage
 import os
 
