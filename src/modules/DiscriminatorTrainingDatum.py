@@ -20,4 +20,4 @@ class TrainingDatum:
 		return self._image
 
 	def __str__(self) -> str:
-		return f"TrainingDatum(discriminations={self._discriminations}, image={self._image})"
+		return f"DiscriminatorTrainingDatum(discriminations={self._discriminations}, image={self._image})"
