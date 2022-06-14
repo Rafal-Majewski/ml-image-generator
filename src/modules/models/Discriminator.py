@@ -29,7 +29,7 @@ class Discriminator:
 	def discriminate(self, image: PILImage) -> np.ndarray:
 		discriminations: np.ndarray = self._model.predict(
 			np.array([self.imageToNumbers(image)]),
-		).numpy()[0]
+		)[0]
 		return discriminations
 
 	def train(

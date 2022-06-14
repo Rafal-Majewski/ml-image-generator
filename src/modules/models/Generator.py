@@ -26,6 +26,6 @@ class Generator:
 
 	def generate(self, discriminations: np.ndarray, noise: np.ndarray) -> PILImage:
 		generatedNumbers: np.ndarray = self._model.predict(
-			np.array(np.concatenate((discriminations, noise), axis=None)),
-		).numpy()[0]
+			np.array([np.concatenate((discriminations, noise), axis=None)]),
+		)[0]
 		return self.numbersToImage(generatedNumbers)
