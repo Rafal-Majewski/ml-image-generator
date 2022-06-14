@@ -4,7 +4,7 @@ from PIL import Image as PILImage
 import os
 
 
-class TrainingDataFileReader:
+class DiscriminatorTrainingDataFileReader:
 	def __init__(self,
 		labelExtractor: LabelExtractor,
 		labels: list[str],
