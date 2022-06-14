@@ -1,16 +1,14 @@
 import random
 from typing import Tuple
-from src.modules.data import DiscriminatorTrainingDatum
+import numpy as np
 from src.modules.models.Discriminator import Discriminator
+from src.modules.models.Gan import Gan
 from src.modules.models.Generator import Generator
-from src.modules.data.DiscriminatorTrainingDatum import TrainingDatum
+from src.modules.data.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
 from src.modules.utils.RegexLabelExtractor import RegexLabelExtractor
-from src.modules.utils.TrainingDataFileReader import TrainingDataFileReader
+from src.modules.utils.DiscriminatorTrainingDataFileReader import DiscriminatorTrainingDataFileReader
 import tensorflow.python.keras as keras
 import tensorflow as tf
-from PIL import Image as PILImage
-import os
-import tabulate
 
 
 labels: list[str] = ["apple", "banana", "person", "orange"]
@@ -62,49 +60,61 @@ def createGeneratorModel() -> keras.Model:
 	)
 	return model
 
-def trainStep(
-	discriminator: Discriminator,
+def generateFakeDiscriminatorTrainingDatum(
 	generator: Generator,
-	realData: list[DiscriminatorTrainingDatum],
-) -> Tuple[float, float]:
-	discriminator.train(realData)
-	generator.train(realData)
-	return discriminator.getLoss(), generator.getLoss()
-	
+) -> DiscriminatorTrainingDatum:
+	noise = np.random.uniform(-1, 1, size=(1, generatorNoiseNeuronsCount))
+	labelId: int = random.randint(0, len(labels) - 1)
+	discriminations = [0 for _ in range(len(labels))]
+	discriminations[labelId] = 1
+	image = generator.generate(discriminations, noise)
+	discriminations[labelId] = -1
+	return DiscriminatorTrainingDatum(
+		discriminations=discriminations,
+		image=image,
+	)
 
-def testDiscriminator(discriminator: Discriminator) -> None:
-	print("---- TESTING DISCRIMINATOR -----")
-	table = []
-	headers = ["filename", *labels]
-	for filename in os.listdir("test_data"):
-		image = PILImage.open(os.path.join("test_data", filename))
-		row: list[str] = [filename]
-		discriminations: list[float] = discriminator.discriminate(image)
-		for i in range(len(discriminations)):
-			row.append(str(round(100*discriminations[i])) + "%")
-		table.append(row)
-	print(tabulate.tabulate(table, headers=headers, tablefmt="fancy_grid"))
+def generateDiscriminatorTrainingData(
+	inputData: list[DiscriminatorTrainingDatum],
+	generator: Generator,
+	size: int,
+) -> list[DiscriminatorTrainingDatum]:
+	generatedData: list[DiscriminatorTrainingDatum] = []
+	for _ in range(size):
+		if random.random() < 0.5:
+			generatedData.append(generateFakeDiscriminatorTrainingDatum(generator))
+		else:
+			generatedData.append(random.choice(inputData))
+	return generatedData
+
+
+def train(
+	gan: Gan,
+	inputData: list[DiscriminatorTrainingDatum],
+) -> None:
+	for epochNumber in range(20):
+		print(generateDiscriminatorTrainingData(inputData, gan.generator, len(inputData)))
 
 if __name__ == "__main__":
 	tf.random.set_seed(42)
 	random.seed(42)
 
-	trainingDataFileReader = TrainingDataFileReader(
+	trainingDataFileReader = DiscriminatorTrainingDataFileReader(
 		labelExtractor=RegexLabelExtractor("^training_data/([a-z A-Z]+)/.*$"),
 		labels=labels,
 	)
-	trainingData: list[TrainingDatum] = trainingDataFileReader.read("training_data")
+	inputData: list[DiscriminatorTrainingDatum] = trainingDataFileReader.read("training_data")
 
 	discriminator = Discriminator(
 		model=createDiscriminatorModel(),
 		imageSize=imageSize,
 	)
-	# discriminator.train(trainingData, epochs=3)
-	testDiscriminator(discriminator)
 	generator = Generator(
 		model=createGeneratorModel(),
 		imageSize=imageSize,
-		noiseNeuronsCount=generatorNoiseNeuronsCount,
 	)
-	generator.generate([1, 0, 0, 0]).show()
-
+	gan = Gan(
+		discriminatorModel=discriminator.model,
+		generatorModel=generator.model,
+	)
+	train(gan, inputData)
