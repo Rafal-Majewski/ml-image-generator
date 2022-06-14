@@ -1,7 +1,7 @@
 from PIL import Image as PILImage
 
 
-class TrainingDatum:
+class DiscriminatorTrainingDatum:
 	def __init__(
 		self,
 		*,
