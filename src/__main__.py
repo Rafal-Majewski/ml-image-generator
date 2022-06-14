@@ -106,38 +106,36 @@ def generateGanTrainingData(
 		))
 	return generatedData
 
-print(generateGanTrainingData(10)[0])
-
-# def train(
-# 	gan: Gan,
-# 	inputData: list[DiscriminatorTrainingDatum],
-# ) -> None:
-# 	for epochNumber in range(5):
-# 		dtd = generateDiscriminatorTrainingData(inputData, gan.generator, 10)
-# 		gan.discriminator.train(dtd)
+def train(
+	gan: Gan,
+	inputData: list[DiscriminatorTrainingDatum],
+) -> None:
+	for epochNumber in range(5):
+		dtd = generateDiscriminatorTrainingData(inputData, gan.generator, 10)
+		gan.discriminator.train(dtd)
 
 
 
-# if __name__ == "__main__":
-# 	tf.random.set_seed(42)
-# 	random.seed(42)
+if __name__ == "__main__":
+	tf.random.set_seed(42)
+	random.seed(42)
 
-# 	trainingDataFileReader = DiscriminatorTrainingDataFileReader(
-# 		labelExtractor=RegexLabelExtractor("^training_data/([a-z A-Z]+)/.*$"),
-# 		labels=labels,
-# 	)
-# 	inputData: list[DiscriminatorTrainingDatum] = trainingDataFileReader.read("training_data")
+	trainingDataFileReader = DiscriminatorTrainingDataFileReader(
+		labelExtractor=RegexLabelExtractor("^training_data/([a-z A-Z]+)/.*$"),
+		labels=labels,
+	)
+	inputData: list[DiscriminatorTrainingDatum] = trainingDataFileReader.read("training_data")
 
-# 	discriminator = Discriminator(
-# 		model=createDiscriminatorModel(),
-# 		imageSize=imageSize,
-# 	)
-# 	generator = Generator(
-# 		model=createGeneratorModel(),
-# 		imageSize=imageSize,
-# 	)
-# 	gan = Gan(
-# 		discriminator=discriminator,
-# 		generator=generator,
-# 	)
-# 	train(gan, inputData)
+	discriminator = Discriminator(
+		model=createDiscriminatorModel(),
+		imageSize=imageSize,
+	)
+	generator = Generator(
+		model=createGeneratorModel(),
+		imageSize=imageSize,
+	)
+	gan = Gan(
+		discriminator=discriminator,
+		generator=generator,
+	)
+	train(gan, inputData)
