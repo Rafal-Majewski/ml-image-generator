@@ -9,6 +9,9 @@ from src.modules.utils.RegexLabelExtractor import RegexLabelExtractor
 from src.modules.utils.DiscriminatorTrainingDataFileReader import DiscriminatorTrainingDataFileReader
 import tensorflow.python.keras as keras
 import tensorflow as tf
+from PIL import Image as PILImage
+import os
+import tabulate
 
 
 labels: list[str] = ["apple", "banana", "person", "orange"]
@@ -114,7 +117,7 @@ if __name__ == "__main__":
 		imageSize=imageSize,
 	)
 	gan = Gan(
-		discriminatorModel=discriminator.model,
-		generatorModel=generator.model,
+		discriminator=discriminator,
+		generator=generator,
 	)
 	train(gan, inputData)
