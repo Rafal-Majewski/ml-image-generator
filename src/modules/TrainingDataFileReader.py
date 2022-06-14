@@ -1,4 +1,4 @@
-from src.modules.TrainingDatum import TrainingDatum
+from src.modules.data.DiscriminatorTrainingDatum import TrainingDatum
 from src.modules.abstract.LabelExtractor import LabelExtractor
 from PIL import Image as PILImage
 import os
