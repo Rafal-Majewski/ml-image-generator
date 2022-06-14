@@ -35,7 +35,7 @@ class Discriminator:
 	def train(
 		self,
 		data: list[DiscriminatorTrainingDatum],
-	) -> None:
+	):
 		x: np.ndarray = np.array(
 			[self.imageToNumbers(datum.image) for datum in data]
 		)
@@ -43,4 +43,4 @@ class Discriminator:
 			[datum.discriminations for datum in data]
 		)
 
-		self._model.train_on_batch(x, y)
+		return self._model.train_on_batch(x, y)

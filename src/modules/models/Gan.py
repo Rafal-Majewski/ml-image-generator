@@ -40,7 +40,7 @@ class Gan:
 	def train(
 		self,
 		data: list[GanTrainingDatum],
-	) -> None:
+	):
 		x: np.ndarray = np.array(
 			[np.concatenate((datum.discriminations, datum.noise), axis=None) for datum in data]
 		)
@@ -48,4 +48,4 @@ class Gan:
 			[datum.discriminations for datum in data]
 		)
 
-		self._model.train_on_batch(x, y)
+		return self._model.train_on_batch(x, y)

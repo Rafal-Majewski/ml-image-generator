@@ -110,11 +110,13 @@ def train(
 	gan: Gan,
 	inputData: list[DiscriminatorTrainingDatum],
 ) -> None:
-	for epochNumber in range(5):
-		dtd = generateDiscriminatorTrainingData(inputData, gan.generator, 10)
-		gan.discriminator.train(dtd)
+	for epochNumber in range(200):
+		dtd = generateDiscriminatorTrainingData(inputData, gan.generator, 20)
+		dloss, _ = gan.discriminator.train(dtd)
 
-
+		gtd = generateGanTrainingData(20)
+		gloss, _ = gan.train(gtd)
+		print(epochNumber, dloss, gloss)
 
 if __name__ == "__main__":
 	tf.random.set_seed(42)
