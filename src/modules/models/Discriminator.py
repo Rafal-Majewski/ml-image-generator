@@ -36,7 +36,6 @@ class Discriminator:
 	def train(
 		self,
 		data: list[DiscriminatorTrainingDatum],
-		epochs: int,
 	) -> None:
 		shuffedData = list(data)
 		random.shuffle(shuffedData)
@@ -48,9 +47,4 @@ class Discriminator:
 			[datum.discriminations for datum in shuffedData]
 		)
 
-		self._model.fit(
-			x,
-			y,
-			epochs=epochs,
-			validation_split=0.2,
-		)
+		self._model.train_on_batch(x, y)
