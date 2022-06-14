@@ -1,9 +1,8 @@
 import random
 from typing import Tuple
 import tensorflow.python.keras as keras
-import tensorflow as tf
 from PIL import Image as PILImage
-from src.modules.TrainingDatum import TrainingDatum
+from src.modules.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
 import numpy as np
 
 
@@ -19,7 +18,9 @@ class Discriminator:
 		self._imageSize = imageSize
 
 	def imageToNumbers(self, image: PILImage) -> np.ndarray:
-		return np.array(image.convert("RGB").resize(self._imageSize).getdata()).flatten() / 255
+		return np.array(
+			image.convert("RGB").resize(self._imageSize).getdata()
+		).flatten() / 255
 
 	def discriminate(self, image: PILImage) -> list[float]:
 		discriminations: list[float] = self._model(
@@ -36,8 +37,13 @@ class Discriminator:
 		shuffedData = list(data)
 		random.shuffle(shuffedData)
 
-		x: np.ndarray = np.array([self.imageToNumbers(datum.image) for datum in shuffedData])
-		y: np.ndarray = np.array([datum.discriminations for datum in shuffedData])
+		x: np.ndarray = np.array(
+			[self.imageToNumbers(datum.image) for datum in shuffedData]
+		)
+		y: np.ndarray = np.array(
+			[datum.discriminations for datum in shuffedData]
+		)
+
 		self._model.fit(
 			x,
 			y,
