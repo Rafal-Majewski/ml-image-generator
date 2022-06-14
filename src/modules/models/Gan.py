@@ -24,6 +24,18 @@ class Gan:
 			metrics=["accuracy"],
 		)
 
+	@property
+	def model(self) -> keras.Model:
+		return self._model
+	
+	@property
+	def discriminatorModel(self) -> keras.Model:
+		return self._discriminatorModel
+
+	@property
+	def generatorModel(self) -> keras.Model:
+		return self._generatorModel
+
 	def train(
 		self,
 		data: list[GanTrainingDatum],
