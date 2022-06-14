@@ -20,4 +20,4 @@ class GanTrainingDatum:
 		return self._noise
 
 	def __str__(self) -> str:
-		return f"GeneratorTrainingDatum(discriminations={self._discriminations}, noise={self._noise})"
+		return f"GanTrainingDatum(discriminations={self._discriminations}, noise={self._noise})"
