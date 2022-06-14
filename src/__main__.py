@@ -4,8 +4,8 @@ from src.modules.data import DiscriminatorTrainingDatum
 from src.modules.models.Discriminator import Discriminator
 from src.modules.models.Generator import Generator
 from src.modules.data.DiscriminatorTrainingDatum import TrainingDatum
-from src.modules.RegexLabelExtractor import RegexLabelExtractor
-from src.modules.TrainingDataFileReader import TrainingDataFileReader
+from src.modules.utils.RegexLabelExtractor import RegexLabelExtractor
+from src.modules.utils.TrainingDataFileReader import TrainingDataFileReader
 import tensorflow.python.keras as keras
 import tensorflow as tf
 from PIL import Image as PILImage

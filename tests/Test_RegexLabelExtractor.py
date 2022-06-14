@@ -1,5 +1,5 @@
 import unittest
-from src.modules.RegexLabelExtractor import RegexLabelExtractor
+from src.modules.utils.RegexLabelExtractor import RegexLabelExtractor
 
 
 class Test_RegexLabelExtractor(unittest.TestCase):
