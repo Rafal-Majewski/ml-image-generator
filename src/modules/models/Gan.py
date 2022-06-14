@@ -1,4 +1,7 @@
+import numpy as np
 import tensorflow.python.keras as keras
+
+from src.modules.data.GanTrainingDatum import GanTrainingDatum
 
 
 class Gan:
@@ -10,7 +13,6 @@ class Gan:
 	) -> None:
 		super().__init__()
 		self._discriminatorModel = discriminatorModel
-		self._discriminatorModel.trainable = False
 		self._generatorModel = generatorModel
 
 		self._model = keras.models.Sequential()
@@ -21,3 +23,16 @@ class Gan:
 			optimizer="adam",
 			metrics=["accuracy"],
 		)
+
+	def train(
+		self,
+		data: list[GanTrainingDatum],
+	) -> None:
+		x: np.ndarray = np.array(
+			[datum.discriminations + datum.noise for datum in data]
+		)
+		y: np.ndarray = np.array(
+			[datum.discriminations for datum in data]
+		)
+
+		self._model.train_on_batch(x, y)
