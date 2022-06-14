@@ -19,6 +19,7 @@ generatorNoiseNeuronsCount = 20
 
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
+	model.trainable = False
 	inputNeuronsCount = imageSize[0] * imageSize[1] * 3
 	outputNeuronsCount = len(labels)
 	model.add(keras.layers.Dense(inputNeuronsCount, activation="relu", input_shape=(inputNeuronsCount,)))
