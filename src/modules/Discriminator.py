@@ -31,7 +31,7 @@ class Discriminator:
 
 	def train(
 		self,
-		data: list[TrainingDatum],
+		data: list[DiscriminatorTrainingDatum],
 		epochs: int,
 	) -> None:
 		shuffedData = list(data)
