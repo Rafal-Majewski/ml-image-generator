@@ -1,5 +1,5 @@
 from typing import Tuple
-import tensorflow.python.keras as keras
+import keras
 from PIL import Image as PILImage
 import numpy as np
 
@@ -19,13 +19,13 @@ class Generator:
 	def model(self) -> keras.Model:
 		return self._model
 
-	def numbersToImage(self, numbers: np.ndarray) -> PILImage:
+	def numbersToImage(self, numbers: np.ndarray) -> PILImage.Image:
 		return PILImage.fromarray(
 			(numbers * 255).astype(np.uint8),
 			"RGB",
 		)
 
-	def generate(self, discriminations: np.ndarray, noise: np.ndarray) -> PILImage:
+	def generate(self, discriminations: np.ndarray, noise: np.ndarray) -> PILImage.Image:
 		generatedNumbers: np.ndarray = self._model(
 			np.array([np.concatenate((discriminations, noise), axis=None)]),
 			training=False,

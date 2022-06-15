@@ -1,6 +1,5 @@
 import numpy as np
-import tensorflow.python.keras as keras
-
+import keras
 from src.modules.data.GanTrainingDatum import GanTrainingDatum
 from src.modules.models.Discriminator import Discriminator
 from src.modules.models.Generator import Generator
@@ -20,8 +19,8 @@ class Gan:
 		self._model.add(self._generator.model)
 		self._model.add(self._discriminator.model)
 		self._model.compile(
-			loss=["binary_crossentropy", "binary_crossentropy"],
-			optimizer="adam",
+			optimizer=keras.optimizers.Adam(lr=0.0002, beta_1=0.5),
+			loss="binary_crossentropy",
 			metrics=["accuracy"],
 		)
 

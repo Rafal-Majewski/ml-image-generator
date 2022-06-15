@@ -1,6 +1,5 @@
-import random
 from typing import Tuple
-import tensorflow.python.keras as keras
+import keras
 from PIL import Image as PILImage
 from src.modules.data.DiscriminatorTrainingDatum import DiscriminatorTrainingDatum
 import numpy as np
@@ -15,18 +14,23 @@ class Discriminator:
 	) -> None:
 		super().__init__()
 		self._model = model
+		self._model.compile(
+			loss="binary_crossentropy",
+			optimizer=keras.optimizers.Adam(lr=0.0002, beta_1=0.5),
+			metrics=["accuracy"],
+		)
 		self._imageSize = imageSize
 
 	@property
 	def model(self) -> keras.Model:
 		return self._model
 
-	def imageToNumbers(self, image: PILImage) -> np.ndarray:
+	def imageToNumbers(self, image: PILImage.Image) -> np.ndarray:
 		return np.array(
 			image.resize(self._imageSize).convert("RGB"),
 		) / 255
 
-	def discriminate(self, image: PILImage) -> np.ndarray:
+	def discriminate(self, image: PILImage.Image) -> np.ndarray:
 		discriminations: np.ndarray = self._model(
 			np.array([self.imageToNumbers(image)]),
 			training=False,

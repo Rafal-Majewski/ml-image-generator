@@ -12,7 +12,7 @@ class RegexLabelExtractor(LabelExtractor):
 		return self._regex
 
 	def extract(self, filepath: str) -> set[str]:
-		match: Optional[re.Match] = self._regex.match(filepath)
-		if match is None:
+		labels: list[str] = self._regex.findall(filepath)
+		if len(labels) == 0:
 			raise RuntimeError(f"{filepath} does not match {self._regex}")
-		return {match.group(1)}
+		return set(labels)
