@@ -1,4 +1,5 @@
 import io
+import pathlib
 import random
 from typing import Tuple
 from matplotlib import pyplot
@@ -13,14 +14,17 @@ from src.modules.utils.DiscriminatorTrainingDataFileReader import DiscriminatorT
 import keras
 import tensorflow as tf
 from PIL import Image as PILImage
+from datetime import datetime as Datetime
 
 
 labels: list[str] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 imageSize: Tuple[int, int] = (28, 28)
 generatorNoiseNeuronsCount = 20
-batchSize = 80
+batchSize = 60
 epochsCount = 1200000
 realDatumWeight = 0.5
+
+runName = Datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
@@ -118,11 +122,19 @@ def train(
 			pyplot.close()
 			plotImg = PILImage.open(imgBuf)
 			constImgs.append(plotImg)
+			pathlib.Path(f"output_data/{runName}/gifs").mkdir(parents=True, exist_ok=True)
 			constImgs[0].save(
-				f"output_data/{epochNumber}.gif",
+				f"output_data/{runName}/gifs/{epochNumber}.gif",
 				save_all=True,
 				append_images=constImgs[1:],
 				loop=0,
+			)
+			pathlib.Path(f"output_data/{runName}/models/{epochNumber}").mkdir(parents=True, exist_ok=True)
+			gan.generator.model.save(
+				f"output_data/{runName}/models/{epochNumber}/generator.h5"
+			)	
+			gan.discriminator.model.save(
+				f"output_data/{runName}/models/{epochNumber}/discriminator.h5"
 			)
 		dtd = generateDiscriminatorTrainingData(realData, gan.generator, batchSize)
 		gan.discriminator.model.trainable = True

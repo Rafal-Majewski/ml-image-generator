@@ -19,7 +19,7 @@ class Gan:
 		self._model.add(self._generator.model)
 		self._model.add(self._discriminator.model)
 		self._model.compile(
-			optimizer=keras.optimizers.Adam(lr=0.0002, beta_1=0.5),
+			optimizer=keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
 			loss="binary_crossentropy",
 			metrics=["accuracy"],
 		)

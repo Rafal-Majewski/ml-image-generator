@@ -16,7 +16,7 @@ class Discriminator:
 		self._model = model
 		self._model.compile(
 			loss="binary_crossentropy",
-			optimizer=keras.optimizers.Adam(lr=0.0002, beta_1=0.5),
+			optimizer=keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
 			metrics=["accuracy"],
 		)
 		self._imageSize = imageSize
