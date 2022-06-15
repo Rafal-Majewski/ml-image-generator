@@ -18,22 +18,20 @@ from PIL import Image as PILImage
 labels: list[str] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 imageSize: Tuple[int, int] = (28, 28)
 generatorNoiseNeuronsCount = 20
-batchSize = 70
+batchSize = 80
 epochsCount = 1200000
 realDatumWeight = 0.5
 
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
 	model.add(keras.layers.InputLayer(input_shape=(imageSize[0], imageSize[1], 3)))
+	model.add(keras.layers.Conv2D(300, (3, 3), padding="same"))
+	model.add(keras.layers.LeakyReLU(alpha=0.2))
+	model.add(keras.layers.Conv2D(300, (3, 3), strides=(2, 2), padding="same"))
+	model.add(keras.layers.LeakyReLU(alpha=0.2))
+	model.add(keras.layers.Conv2D(300, (3, 3), strides=(2, 2), padding="same"))
+	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Flatten())
-	model.add(keras.layers.Dense(600))
-	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(400))
-	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(200))
-	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(100))
-	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Dense(len(labels)))
 	model.add(keras.layers.Activation("sigmoid"))
 	return model
@@ -45,18 +43,20 @@ def createGeneratorModel() -> keras.Model:
 	model.add(keras.layers.Input(shape=(inputNeuronsCount,)))
 	model.add(keras.layers.Dense(50))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(150))
+	model.add(keras.layers.Dense(70))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(400))
+	model.add(keras.layers.Dense(49))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(900))
+	model.add(keras.layers.Reshape((7, 7, 1)))
+	model.add(keras.layers.Conv2D(300, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(1500))
+	model.add(keras.layers.UpSampling2D((2, 2)))
+	model.add(keras.layers.Conv2D(400, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(2100))
+	model.add(keras.layers.UpSampling2D((2, 2)))
+	model.add(keras.layers.Conv2D(600, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(2352))
-	model.add(keras.layers.Reshape((imageSize[0], imageSize[1], 3)))
+	model.add(keras.layers.Conv2D(3, (3, 3), padding="same"))
 	model.add(keras.layers.Activation("sigmoid"))
 	return model
 
