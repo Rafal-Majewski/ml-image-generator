@@ -23,13 +23,14 @@ class Discriminator:
 
 	def imageToNumbers(self, image: PILImage) -> np.ndarray:
 		return np.array(
-			image.convert("RGB").resize(self._imageSize).getdata()
-		).flatten() / 255
+			image.resize(self._imageSize).convert("RGB"),
+		) / 255
 
 	def discriminate(self, image: PILImage) -> np.ndarray:
-		discriminations: np.ndarray = self._model.predict(
+		discriminations: np.ndarray = self._model(
 			np.array([self.imageToNumbers(image)]),
-		)[0]
+			training=False,
+		).numpy()[0]
 		return discriminations
 
 	def train(
@@ -37,7 +38,7 @@ class Discriminator:
 		data: list[DiscriminatorTrainingDatum],
 	):
 		x: np.ndarray = np.array(
-			[self.imageToNumbers(datum.image) for datum in data]
+			[datum.pixels for datum in data]
 		)
 		y: np.ndarray = np.array(
 			[datum.discriminations for datum in data]

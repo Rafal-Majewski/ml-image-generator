@@ -21,11 +21,13 @@ class Generator:
 
 	def numbersToImage(self, numbers: np.ndarray) -> PILImage:
 		return PILImage.fromarray(
-			(numbers.reshape(self._imageSize[0], self._imageSize[1], 3) * 255).astype(np.uint8),
-		).convert("RGB")
+			(numbers * 255).astype(np.uint8),
+			"RGB",
+		)
 
 	def generate(self, discriminations: np.ndarray, noise: np.ndarray) -> PILImage:
-		generatedNumbers: np.ndarray = self._model.predict(
+		generatedNumbers: np.ndarray = self._model(
 			np.array([np.concatenate((discriminations, noise), axis=None)]),
-		)[0]
+			training=False,
+		).numpy()[0]
 		return self.numbersToImage(generatedNumbers)

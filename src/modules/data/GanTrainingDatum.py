@@ -6,7 +6,7 @@ class GanTrainingDatum:
 		self,
 		*,
 		discriminations: np.ndarray,
-		noise: np.ndarray,
+		noise: np.ndarray, # normalized: [0.0, 1.0]
 	) -> None:
 		self._discriminations = discriminations
 		self._noise = noise
