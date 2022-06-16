@@ -13,6 +13,6 @@ class RegexLabelExtractor(LabelExtractor):
 
 	def extract(self, filepath: str) -> set[str]:
 		labels: list[str] = self._regex.findall(filepath)
-		if len(labels) == 0:
-			raise RuntimeError(f"{filepath} does not match {self._regex}")
+		# if len(labels) == 0:
+		# 	raise RuntimeError(f"{filepath} does not match {self._regex}")
 		return set(labels)
