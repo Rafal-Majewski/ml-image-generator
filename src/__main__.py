@@ -112,6 +112,8 @@ def train(
 	gan: Gan,
 	realData: list[DiscriminatorTrainingDatum],
 ) -> None:
+	with open(f"output_data/{runName}/log.txt", "w") as f:
+		f.write(f"epoch\tdloss\tdacc\tgloss\tgacc\n")
 	for epochNumber in range(epochsCount):
 		if epochNumber % 5 == 0:
 			for i, ganDatum in enumerate(constGanData):
@@ -145,7 +147,12 @@ def train(
 		gtd = generateGanTrainingData(batchSize)
 		gan.discriminator.model.trainable = False
 		gloss, gacc = gan.train(gtd)
-		print(epochNumber, "dloss:", dloss, "dacc:", dacc, "gloss:", gloss, "gacc:", gacc)
+		logString = f"{epochNumber}\t{dloss:.4f}\t{dacc:.4f}\t{gloss:.4f}\t{gacc:.4f}"
+		print(logString)
+		with open(f"output_data/{runName}/log.txt", "a") as f:
+			f.write(logString + "\n")
+
+
 
 def generateRandomDiscriminations() -> np.ndarray:
 	discriminations = np.zeros(len(labels))
