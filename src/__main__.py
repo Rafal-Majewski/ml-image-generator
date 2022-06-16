@@ -24,16 +24,14 @@ batchSize = 60
 epochsCount = 1200000
 realDatumWeight = 0.5
 
-runName = Datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
 	model.add(keras.layers.InputLayer(input_shape=(imageSize[0], imageSize[1], 3)))
-	model.add(keras.layers.Conv2D(300, (3, 3), padding="same"))
+	model.add(keras.layers.Conv2D(30, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Conv2D(300, (3, 3), strides=(2, 2), padding="same"))
+	model.add(keras.layers.Conv2D(30, (3, 3), strides=(2, 2), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Conv2D(300, (3, 3), strides=(2, 2), padding="same"))
+	model.add(keras.layers.Conv2D(30, (3, 3), strides=(2, 2), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Flatten())
 	model.add(keras.layers.Dense(len(labels)))
@@ -43,27 +41,30 @@ def createDiscriminatorModel() -> keras.Model:
 def createGeneratorModel() -> keras.Model:
 	model = keras.models.Sequential()
 	inputNeuronsCount = len(labels) + generatorNoiseNeuronsCount
-
 	model.add(keras.layers.Input(shape=(inputNeuronsCount,)))
-	model.add(keras.layers.Dense(50))
+	model.add(keras.layers.Dense(40))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
-	model.add(keras.layers.Dense(70))
+	model.add(keras.layers.Dense(60))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Dense(49))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Reshape((7, 7, 1)))
-	model.add(keras.layers.Conv2D(300, (3, 3), padding="same"))
+	model.add(keras.layers.Conv2D(30, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.UpSampling2D((2, 2)))
-	model.add(keras.layers.Conv2D(400, (3, 3), padding="same"))
+	model.add(keras.layers.Conv2D(40, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.UpSampling2D((2, 2)))
-	model.add(keras.layers.Conv2D(600, (3, 3), padding="same"))
+	model.add(keras.layers.Conv2D(60, (3, 3), padding="same"))
 	model.add(keras.layers.LeakyReLU(alpha=0.2))
 	model.add(keras.layers.Conv2D(3, (3, 3), padding="same"))
 	model.add(keras.layers.Activation("sigmoid"))
 	return model
 
+def generateRandomNoise() -> np.ndarray:
+	return np.random.normal(0, 1, size=generatorNoiseNeuronsCount)
+
+runName = Datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 def generateFakeDiscriminatorTrainingDatum(
 	generator: Generator,
@@ -151,15 +152,11 @@ def generateRandomDiscriminations() -> np.ndarray:
 	discriminations[labelId] = random.uniform(0.9, 1.0)
 	return discriminations
 
-def generateRandomNoise() -> np.ndarray:
-	return np.random.normal(0, 1, size=generatorNoiseNeuronsCount)
-
 def generateSample(generator: Generator) -> PILImage:
 	discriminations = generateRandomDiscriminations()
 	noise = generateRandomNoise()
 	image = generator.generate(discriminations, noise)
 	return image
-
 
 def generateSamples(
 	generator: Generator,
