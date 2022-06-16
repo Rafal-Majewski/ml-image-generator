@@ -23,6 +23,7 @@ generatorNoiseNeuronsCount = 20
 batchSize = 60
 epochsCount = 1200000
 realDatumWeight = 0.5
+labelRegex="(?<=training_data\\/)[0-9](?=\\/)"
 
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
@@ -188,7 +189,7 @@ if __name__ == "__main__":
 
 	discriminatorTrainingDataFileReader = DiscriminatorTrainingDataFileReader(
 		# labelExtractor=RegexLabelExtractor("(?<=[-\/])[a-z]+(?=[-\.])"),
-		labelExtractor=RegexLabelExtractor("(?<=training_data\\/)[0-9](?=\\/)"),
+		labelExtractor=RegexLabelExtractor(),
 		labels=labels,
 		imageSize=imageSize,
 	)
