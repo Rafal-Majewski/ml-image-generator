@@ -17,13 +17,13 @@ from PIL import Image as PILImage
 from datetime import datetime as Datetime
 
 
-labels: list[str] = ["apple", "orange"]
+labels: list[str] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 imageSize: Tuple[int, int] = (28, 28)
 generatorNoiseNeuronsCount = 20
-batchSize = 70
+batchSize = 60
 epochsCount = 1200000
 realDatumWeight = 0.5
-labelRegex="(?<=training_data\\/)(apple|orange)(?=\\/)"
+labelRegex="(?<=training_data\\/)[0-9](?=\\/)"
 
 def createDiscriminatorModel() -> keras.Model:
 	model = keras.models.Sequential()
@@ -88,7 +88,8 @@ def generateDiscriminatorTrainingData(
 	for _ in range(round(realDatumWeight * size)):
 		generatedData.append(random.choice(realData))
 	for _ in range(size - len(generatedData)):
-		generatedData.append(generator.generate(generateRandomDiscriminations(), generateRandomNoise()))
+		generatedData.append(generateFakeDiscriminatorTrainingDatum(generator))
+	random.shuffle(generatedData)
 	return generatedData
 
 def generateRandomGanTrainingDatum() -> GanTrainingDatum:
